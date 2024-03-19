@@ -5,7 +5,7 @@ button {
 }
 :root {
   --offcanvas-width: 270px;
-  --topNavbarHeight: 50px;
+  --topNavbarHeight: 55px;
 }
 .sidebar-nav {
   width: var(--offcanvas-width);
@@ -26,6 +26,7 @@ button {
   }
   main {
     margin-left: var(--offcanvas-width);
+    height: 120vh;
   }
   /* this is to remove the backdrop */
   .offcanvas-backdrop::before {
@@ -38,4 +39,18 @@ button {
     height: calc(100% - var(--topNavbarHeight));
     top: var(--topNavbarHeight);
   }
+}
+
+@media (max-width: 991px) {
+  main {
+    height: 170vh;
+  }
+}
+
+.foot {
+  position: fixed;
+  left: 50;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
 }
