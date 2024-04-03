@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% set active_page = "upload" %}
+
+{% block content %}
+
+   
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show mx-auto mt-3 reduce" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+            <!-- Account details card-->
+    
+    <fieldset class="card pb-4 mb-5 mt-5 col-xl-6 mx-auto shadow">
+        <legend class="card-header">Upload Slides</legend>
+        <div class="card-body">
+            <form class="card-body">
+                <div class="mb-3">
+                    <input class="form-control custom-input" id="inputUsername" type="text" placeholder="Session e.g. 2023/2024">
+                </div>
+                <div class="mb-3">
+                    <select name="term" class="form-select custom-input">
+                        <option value="" selected>Select term</option>
+                        <option value="First term">First term</option>
+                        <option value="Second term">Second term</option>
+                        <option value="Third term">Third term</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <select name="grade" class="form-select custom-input">
+                        <option value="" selected>Select grade</option>
+                        <option value="Grade 7">Grade 7</option>
+                        <option value="Grade 8">Grade 8</option>
+                        <option value="Grade 9">Grade 9</option>
+                        <option value="Grade 10">Grade 10</option>
+                        <option value="Grade 11">Grade 11</option>
+                        <option value="Grade 12">Grade 12</option>
+                    </select>
+                </div>
+                <div class="alert alert-warning alert-dismissible text-secondary fw-bold">
+                    Multiple files select (select all slides at once).
+                </div>
+                <input type="file" class="form-control mb-3 custom-input" multiple id="slides">
+                <button class="btn btn-primary col-xl-12 fw-bold p-2 shadow-none" type="button">Upload</button>
+            </form>         
+        </div>
+    </fieldset>
+  
+{% endblock%}

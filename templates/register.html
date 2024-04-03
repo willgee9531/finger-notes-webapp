@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | FingerNotes</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 500px;
+            margin-top: 30px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .btn-exotic {
+            background-color: #3f51b5;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            width: 100%;
+            height: 50px;
+        }
+        .btn-exotic:hover {
+            background-color: #303f9f;
+        }
+        .text-muted {
+            font-size: 14px;
+        }
+        img {
+            width: 50%;
+            margin-left: 80px;
+            padding: 5px;        
+        }
+        .custom-input {
+            border-radius: 0;
+        }
+        .custom-input:focus {
+            border: none;
+            outline: none; /* Remove default focus outline */
+            box-shadow: 0px 0px 2px blue;
+        }
+        .rounded {
+            box-shadow: 0px 0px 3px rgba(6, 6, 6, 0.342);
+            background: rgb(210, 210, 214);
+        }
+        .reduce {
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show mt-2 mx-auto reduce" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+    <div class="container">
+        <div class="rounded mb-3  w-100 mx-auto h-50">
+            <a href="{{ url_for('homepage') }}"><img src="{{ url_for('static', filename='img/navbar-logo.png') }}" alt="Exotic Logo"></a>
+        </div>
+        <h4 class="text-secondary">Get Started!</h4>
+        <h6 class="text-secondary mb-4">Signing up is easy. It only takes a few steps</h6>
+        <form action="/signup" method="POST">
+            {{ form.csrf_token }}
+            <div class="form-group">
+                {{ form.schoolName(class="form-control py-2 px-4 custom-input") }}
+            </div>
+            <div class="form-group">
+                {{ form.email(class="form-control py-2 px-4 custom-input") }}
+                {% for error in form.email.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.country(class="form-select py-1 px-4 custom-input") }}
+            </div>
+            <div class="form-group">
+                {{ form.password_hash(class="form-control py-2 px-4 custom-input") }}
+            </div>
+            <div class="form-group">
+                {{ form.password_hash2(class="form-control py-2 px-4 custom-input") }}
+                {% for error in form.password_hash2.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="mb-4">
+                <div class="form-check">
+                    {{ form.terms(class="form-check-input") }}
+                    <label class="form-check-label text-muted">
+                    I agree to all <a class="text-decoration-none" href="#">Terms & Conditions</a>
+                    </label>
+                </div>
+            </div>
+            {{ form.submit(class="btn btn-primary btn-exotic") }}
+            <p class="text-muted text-center mt-3">Already have an account? <a href="{{ url_for('signin') }}">Sign In</a></p>
+        </form>
+    </div>
+
+    <footer class="px-5 fixed-bottom ">
+        <p class="text-end">&copy;2024 fingernotes</p>   
+    </footer>
+    
+    {% for user in users %}
+        {{ user.id }}: {{ user.school_name }} - {{ user.email }} - {{ user.country}} <br>
+    {% endfor %}
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="{{ url_for('static', filename='img/logo.ico') }}" type="image/x-icon">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dBaord_css/bootstrap.min.css') }}" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+        />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dBaord_css/dataTables.bootstrap5.min.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dBaord_css/style.css') }}" />
+        <title>FingerNotes | Heaven way</title>
+        <style>
+            .custom-input:focus {
+                border: none;
+                outline: none; /* Remove default focus outline */
+                box-shadow: 0px 0px 2px blue;
+            }
+        </style>
+    </head>
+    <body>
+    <!-- top navigation bar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark fixed-top py-0">
+            <div class="container-fluid">
+                <button
+                class="navbar-toggler bg-light"
+                type="button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#sidebar"
+                aria-controls="offcanvasExample"
+                >
+                    <span class="navbar-toggler-icon" data-bs-target="#sidebar"></span>
+                </button>
+                <a
+                class="navbar-brand me-auto ms-lg-0 ms-3 mx-sm-auto"
+                href="{{ url_for('homepage')}}"
+                ><img style="width: 210px;height: 45px;" src="{{ url_for('static', filename='img/navbar-logo.png') }}" alt=""></a>
+            
+                <div class="collapse navbar-collapse" id="topNavBar">
+                    <div class="d-block ms-auto my-lg-0">
+                        <h6 class="text-end text-light fw-bolder mb-0">Heaven Way College</h6>
+                        <em class="text-light"><small>enroll@heavenwaycollege.com</small></em>
+                    </div>
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a
+                                class="nav-link ms-2"
+                                href="#"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                <img class="rounded-circle border border-2 border-warning" src="{{ url_for('static', filename='img/1.jpg') }}" width="40px" alt="">
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ url_for('profile') }}"><i class="bi bi-person-circle me-2"></i> Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('settings') }}"><i class="bi bi-gear me-2"></i> Settings</a></li>
+                                <li>
+                                    <a href="#" class="nav-link px-3">
+                                        <button class="btn btn-danger py-1 px-3" type="button">Sign Out</button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- top navigation bar -->
+        <!-- offcanvas -->
+        <div
+        class="offcanvas offcanvas-start sidebar-nav bg-dark"
+        tabindex="-1"
+        id="sidebar"
+        >
+            <div class="offcanvas-body p-0">
+                <nav class="navbar-dark">
+                    <ul class="navbar-nav">
+                        <li class="d-lg-none">
+                            <div class="col-md-11 mb-3 mx-auto shadow">
+                                <div class="card bg-dark text-white">
+                                    <div class="card-head mt-5">
+                                        <img class="border border-3 border-warning rounded-circle d-block mx-auto" src="{{ url_for('static', filename='img/1.jpg') }}" width="80px">
+                                    </div>
+                                    <h5 class="card-body text-center text-uppercase fw-bold">
+                                        Heaven Way College
+                                    </h5>
+                                    <em class="text-light text-center"><small>enroll@heavenwaycollege.com</small></em>
+                                </div>
+                            </div>
+                        </li>
+                        <br>
+                        <li>
+                            <a href="{{ url_for('dashboard') }}" class="nav-link px-3 {{'active' if active_page == 'dashboard'}}">
+                                <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="my-4"><hr class="dropdown-divider bg-light" /></li>
+                        <li>
+                            <a href="{{ url_for('upload') }}" class="nav-link px-3 {{'active' if active_page == 'upload'}}">
+                                <span class="me-2"><i class="bi bi-file-earmark-ppt"></i></span>
+                                <span>Upload slides</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('download') }}" class="nav-link px-3 {{'active' if active_page == 'download'}}">
+                                <span class="me-2"><i class="bi bi-download"></i></span>
+                                <span>Download e-note</span>
+                            </a>
+                        </li>
+                        <li class="d-lg-none">
+                            <a
+                                class="nav-link px-3 sidebar-link"
+                                data-bs-toggle="collapse"
+                                href="#layouts"
+                            >
+                                <span class="me-2"><i class="bi bi-menu-button"></i></span>
+                                <span>Menu</span>
+                                <span class="ms-auto">
+                                <span class="right-icon">
+                                    <i class="bi bi-chevron-down"></i>
+                                </span>
+                                </span>
+                            </a>
+                            <div class="collapse" id="layouts">
+                                <ul class="navbar-nav ps-3">
+                                    <li>
+                                        <a href="{{ url_for('profile') }}" class="nav-link px-3">
+                                            <span class="me-2">
+                                                <i class="bi bi-person-circle"></i>
+                                            </span>
+                                            <span>Profile</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url_for('settings') }}" class="nav-link px-3">
+                                            <span class="me-2">
+                                                <i class="bi bi-gear"></i>
+                                            </span>
+                                            <span>Settings</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="nav-link px-3">
+                                            <button class="btn btn-danger py-1 px-3" type="button">Sign Out</button>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    <!-- offcanvas -->
+        <main class="mt-5 pt-3">
+            {% block content %}
+
+            {% endblock %}
+            <footer class="footer mt-10 py-2 text-center bg-light me-auto foot">
+                <div class="container">
+                    <div class="row align-items-center ">
+                        <div class="col-lg-3 text-lg-start">Copyright &copy; FingerNotes 2024</div>
+                        <div class="col-lg-3 my-3 my-lg-0">
+                            <a class="btn btn-dark btn-social rounded-circle mx-2" href="#!" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-dark btn-social rounded-circle mx-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-dark btn-social rounded-circle mx-2" href="#!" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                        <div class="col-lg-3 text-lg-end">
+                            <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
+                            <a class="link-dark text-decoration-none" href="#!">Terms of Use</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+    
+        <script src="{{ url_for('static', filename='js/dBoard_js/bootstrap.bundle.min.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+        <script src="{{ url_for('static', filename='js/dBoard_js/jquery-3.5.1.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/dBoard_js/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/dBoard_js/dataTables.bootstrap5.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/dBoard_js/script.js') }}"></script>
+    </body>
+</html>

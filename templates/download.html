@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% set active_page = "download" %}
+
+{% block content %}
+
+   
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show mx-auto mt-3 reduce" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+    
+    <fieldset class="card pb-4 mb-5 mt-5 col-xl-6 mx-auto shadow">
+        <legend class="card-header">Download e-note</legend>
+        <div class="card-body">
+            {% if data %}
+                <form class="card-body">
+                    <div class="mb-5">
+                        
+                        <select name="grade" class="form-select custom-input">
+                            <option value="" selected>Select grade</option>
+                            <option value="Grade 7">Grade 7</option>
+                            <option value="Grade 8">Grade 8</option>
+                            <option value="Grade 9">Grade 9</option>
+                            <option value="Grade 10">Grade 10</option>
+                            <option value="Grade 11">Grade 11</option>
+                            <option value="Grade 12">Grade 12</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary col-xl-12 fw-bold p-2 shadow-none" type="button">Download</button>
+                </form>
+            {% else %}
+                <div class="alert alert-warning alert-dismissible text-success fw-bold">
+                    e-note not available, check back later.
+                </div>
+            {% endif %}
+        </div>
+    </fieldset>
+  
+{% endblock%}

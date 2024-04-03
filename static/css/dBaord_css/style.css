@@ -4,7 +4,7 @@ button {
   font-family: "Inter", sans-serif;
 }
 :root {
-  --offcanvas-width: 270px;
+  --offcanvas-width: 250px;
   --topNavbarHeight: 55px;
 }
 .sidebar-nav {
@@ -43,7 +43,7 @@ button {
 
 @media (max-width: 991px) {
   main {
-    height: 170vh;
+    height: 190vh;
   }
 }
 

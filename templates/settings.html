@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container px-4 mt-3">
+        {% for message in get_flashed_messages() %}
+                <div class="alert alert-warning alert-dismissible fade show mx-auto mt-3 reduce" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+        {% endfor %}
+        <div class="row">
+            <div class="col-xl-10 mx-auto">
+                <!-- Account details card-->
+                <div class="card mb-4 shadow">
+                    <div class="card-header">Account Settings</div>
+                    <div class="card-body">
+                        <div class="card my-4 shadow">
+                            <div class="mb-3 card-header">Change password</div>
+                            <form class="card-body">
+                                <div class="mb-3">
+                                    <input class="form-control custom-input" id="inputUsername" type="password" placeholder="Old password">
+                                </div>
+                                <div class="mb-3">
+                                    <input class="form-control custom-input" id="inputUsername" type="password" placeholder="New password">
+                                </div>
+                                <div class="mb-3">
+                                    <input class="form-control custom-input" id="inputUsername" type="password" placeholder="Confirm password">
+                                </div>
+                                <button class="btn btn-success shadow-none" type="button">Save changes</button>
+                            </form>
+                        </div>
+                        <hr>
+                        <div class="card my-4 shadow">
+                            <div class="mb-3 card-header">Delete Account</div>
+                            <div class="card-body">
+                                <div class="alert alert-warning alert-dismissible text-danger fw-bold">
+                                    Are you sure you want to delete your account? <br>
+                                    Once you delete your account, there is no going back. Please be certain!
+                                </div>
+                                <form action="">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation">
+                                        <label class="form-check-label text-muted" for="accountActivation">I confirm my account deactivation</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-danger shadow-none">Deactivate Account</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock%}
