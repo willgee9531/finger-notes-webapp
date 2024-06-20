@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% set active_page = "profile" %}
+
+{% block content %}
+
+    <div class="container px-4 mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show mx-auto mt-3 reduce" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="row">
+            <div class="col-xl-4">
+                <!-- Profile picture card-->
+                <div class="card mb-4 mb-xl-0 shadow">
+                    <div class="card-header">Profile Picture</div>
+                    <div class="card-body text-center">
+                        <!-- Profile picture image-->
+                        <img class="img-account-profile rounded-circle mb-2" src="{{ image_file }}" alt="" width="200px">
+                        <!-- Profile picture help block-->
+                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                        <!-- Profile picture upload button-->
+                        <form method="POST" action="" enctype="multipart/form-data">
+                            {{ pics_form.csrf_token }}
+                            {{ pics_form.picture(class="form-control mb-3 custom-input", accept=".jpg,.JPG,.PNG,.png") }}
+                            {% for error in pics_form.picture.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %} <br>
+                            {{ pics_form.submit(class="btn btn-success py-2 w-100 shadow-none") }}
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8">
+                <!-- Account details card-->
+                <div class="card mb-4 shadow">
+                    <div class="card-header">Account Details</div>
+                        <div class="card-body">
+                            <form action="" method="post">
+                                {{ form.csrf_token }}
+                                <!-- Form Group (Schoolname)-->
+                                <div class="mb-3">
+                                    {{ form.school_name.label(class="small mb-1") }}
+                                    {{ form.school_name(class="form-control custom-input") }}
+                                </div>
+                                <!-- Form Row-->
+                                <div class="row gx-3 mb-3">
+                                    <!-- Form Group (Country)-->
+                                    <div class="col-md-6">
+                                        {{ form.country.label(class="small mb-1") }}
+                                        {{ form.country(class="form-control custom-input") }}
+                                    </div>
+                                    <!-- Form Group (Telephone)-->
+                                    <div class="col-md-6">
+                                        {{ form.telephone_number.label(class="small mb-1") }}
+                                        {{ form.telephone_number(class="form-control custom-input") }}
+                                    </div>
+                                </div>
+                                <!--  Form Group (School Address)  -->
+                                <div class="mb-3">
+                                    {{ form.school_address.label(class="small mb-1") }}
+                                    {{ form.school_address(class="form-control custom-input") }}
+                                </div>
+                                <!-- Form Group (email address)-->
+                                <div class="mb-3">
+                                    {{ form.email_address.label(class="small mb-1") }}
+                                    {{ form.email_address(class="form-control custom-input") }}
+                                    {% for error in form.email_address.errors %}
+                                        <div class="text-danger">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                <!-- Form Group (Websites)-->
+                                <div class="mb-3">
+                                    {{ form.school_website.label(class="small mb-1") }}
+                                    {{ form.school_website(class="form-control custom-input") }}
+                                </div>
+                                <!-- Save changes button-->
+                                {{ form.submit(class="btn btn-success px-5 py-2 shadow-none") }}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock%}

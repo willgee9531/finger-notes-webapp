@@ -1,0 +1,49 @@
+{% extends 'admin_base.html' %}
+
+{% set active_page = "admin_settings" %}
+
+{% block content %}
+
+    <div class="container px-4 mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show mx-auto mt-3 reduce" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="row">
+            <div class="col-xl-10 mx-auto">
+                <!-- Account details card-->
+                <div class="card my-4 shadow">
+                    <div class="mb-3 card-header">Delete School Account</div>
+                    <div class="card-body">
+                        <div class="alert alert-warning alert-dismissible text-danger fw-bold">
+                            Are you sure you want to delete their account? <br>
+                            Once you delete their account, there is no going back. Please be certain!
+                        </div>
+                        <form action="" method="POST">
+                            <div class="mb-3">
+                                <select name="delete-account" class="form-select custom-input">
+                                    <option value="" selected>Select School</option>
+                                    {% for user in users%}
+                                        <option value="{{ user.school_name }}">{{ user.school_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation" required>
+                                <label class="form-check-label text-muted" for="accountActivation">I am sure about this.</label>
+                            </div>
+                            <button type="submit" class="btn btn-danger shadow-none">Deactivate Account</button>
+                        </form>
+                        {{ school }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

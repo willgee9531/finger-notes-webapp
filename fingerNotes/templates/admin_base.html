@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="{{ url_for('static', filename='img/logo.ico') }}" type="image/x-icon">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dBaord_css/bootstrap.min.css') }}" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+        />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dBaord_css/dataTables.bootstrap5.min.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dBaord_css/style.css') }}" />
+        <title>FingerNotes | Admin</title>
+        <style>
+            .custom-input:focus {
+                border: none;
+                outline: none; /* Remove default focus outline */
+                box-shadow: 0px 0px 2px blue;
+            }
+        </style>
+    </head>
+    <body>
+    <!-- top navigation bar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark fixed-top py-0">
+            <div class="container-fluid">
+                <button
+                class="navbar-toggler bg-light"
+                type="button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#sidebar"
+                aria-controls="offcanvasExample"
+                >
+                    <span class="navbar-toggler-icon" data-bs-target="#sidebar"></span>
+                </button>
+                <a
+                class="navbar-brand me-auto ms-lg-0 ms-3 mx-sm-auto"
+                href="{{ url_for('homepage')}}"
+                ><img style="width: 210px;height: 45px;" src="{{ url_for('static', filename='img/navbar-logo.png') }}" alt=""></a>
+            
+                <div class="collapse navbar-collapse" id="topNavBar">
+                    <div class="d-block ms-auto my-lg-0">
+                        <h6 class="text-end text-light fw-bolder mb-0">Admin</h6>
+                        <em class="text-light"><small>fingernotes@gmail.com</small></em>
+                    </div>
+                    
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a
+                                class="nav-link ms-2"
+                                href="#"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                            <img class="rounded-circle bg-light border border-2 border-warning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAWCAYAAAArdgcFAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA+5pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ1dWlkOjY1RTYzOTA2ODZDRjExREJBNkUyRDg4N0NFQUNCNDA3IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkIzOUVGMUYxMDY3MTExRTI5OUZEQTZGODg4RDc1ODdCIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkIzOUVGMUYwMDY3MTExRTI5OUZEQTZGODg4RDc1ODdCIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDUzYgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDowMTgwMTE3NDA3MjA2ODExODA4M0ZFMkJBM0M1RUU2NSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowNjgwMTE3NDA3MjA2ODExODA4M0U3NkRBMDNEMDVDMSIvPiA8ZGM6dGl0bGU+IDxyZGY6QWx0PiA8cmRmOmxpIHhtbDpsYW5nPSJ4LWRlZmF1bHQiPmdseXBoaWNvbnM8L3JkZjpsaT4gPC9yZGY6QWx0PiA8L2RjOnRpdGxlPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PkX/peQAAACrSURBVHja7JSLCYAwDEQbJ3AER+kouoFu0FEcqSM4gk4QE4ggVRPxg1A8OFCSvkqC5xDRaSZ5ciTjyvzuzbMnwKjY34FHAx618yCQXQHAcVFE5+GoVijgyt3UN1/+hPKFd0a9ubxQa6naMjOdOY2jJAdjZIH7tJ8gzRNuZuho5MriUfpLNbhINXk4Cd27pN3AJVqvQlMPSxSz+oegqXuQhz9bNvDpJfY0CzAA6Ncngv5RALIAAAAASUVORK5CYII=" width="40px" alt="">
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item mb-2" href="{{ url_for('admin_settings') }}"><i class="bi bi-gear me-2"></i> Settings</a></li>
+                                <li>
+                                    <a href="{{ url_for('admin_signout') }}" class="btn btn-danger py-1 ms-3 px-3">Sign Out</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- top navigation bar -->
+        <!-- offcanvas -->
+        <div
+        class="offcanvas offcanvas-start sidebar-nav bg-dark"
+        tabindex="-1"
+        id="sidebar"
+        >
+            <div class="offcanvas-body p-0">
+                <nav class="navbar-dark">
+                    <ul class="navbar-nav">
+                        <li class="d-lg-none">
+                            <div class="col-md-11 mb-3 mx-auto shadow">
+                                <div class="card bg-dark text-white">
+                                    <div class="card-head mt-5">
+                                        <img class="border border-3 bg-light border-warning rounded-circle d-block mx-auto" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAWCAYAAAArdgcFAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA+5pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ1dWlkOjY1RTYzOTA2ODZDRjExREJBNkUyRDg4N0NFQUNCNDA3IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkIzOUVGMUYxMDY3MTExRTI5OUZEQTZGODg4RDc1ODdCIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkIzOUVGMUYwMDY3MTExRTI5OUZEQTZGODg4RDc1ODdCIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDUzYgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDowMTgwMTE3NDA3MjA2ODExODA4M0ZFMkJBM0M1RUU2NSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowNjgwMTE3NDA3MjA2ODExODA4M0U3NkRBMDNEMDVDMSIvPiA8ZGM6dGl0bGU+IDxyZGY6QWx0PiA8cmRmOmxpIHhtbDpsYW5nPSJ4LWRlZmF1bHQiPmdseXBoaWNvbnM8L3JkZjpsaT4gPC9yZGY6QWx0PiA8L2RjOnRpdGxlPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PkX/peQAAACrSURBVHja7JSLCYAwDEQbJ3AER+kouoFu0FEcqSM4gk4QE4ggVRPxg1A8OFCSvkqC5xDRaSZ5ciTjyvzuzbMnwKjY34FHAx618yCQXQHAcVFE5+GoVijgyt3UN1/+hPKFd0a9ubxQa6naMjOdOY2jJAdjZIH7tJ8gzRNuZuho5MriUfpLNbhINXk4Cd27pN3AJVqvQlMPSxSz+oegqXuQhz9bNvDpJfY0CzAA6Ncngv5RALIAAAAASUVORK5CYII=" width="80px">
+                                    </div>
+                                    <h5 class="card-body text-center text-uppercase fw-bold">
+                                        Admin
+                                    </h5>
+                                    <em class="text-light text-center"><small>fingernotes@gmail.com</small></em>
+                                </div>
+                            </div>
+                        </li>
+                        <br>
+                        <li>
+                            <a href="{{ url_for('admin_dashboard') }}" class="nav-link px-3 {{'active' if active_page == 'admin_dashboard'}}">
+                                <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="my-4"><hr class="dropdown-divider bg-light" /></li>
+                        <li>
+                            <a href="{{ url_for('admin_upload') }}" class="nav-link px-3 {{'active' if active_page == 'admin_upload'}}">
+                                <span class="me-2"><i class="bi bi-file-earmark-ppt"></i></span>
+                                <span>Upload enote</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('admin_partners') }}" class="nav-link px-3 {{'active' if active_page == 'admin_partners'}}">
+                                <span class="me-2"><i class="bi bi-people"></i></span>
+                                <span>Partners</span>
+                            </a>
+                        </li>
+                        <li class="d-lg-none">
+                            <a
+                                class="nav-link px-3 sidebar-link"
+                                data-bs-toggle="collapse"
+                                href="#layouts"
+                            >
+                                <span class="me-2"><i class="bi bi-menu-button"></i></span>
+                                <span>Menu</span>
+                                <span class="ms-auto">
+                                <span class="right-icon">
+                                    <i class="bi bi-chevron-down"></i>
+                                </span>
+                                </span>
+                            </a>
+                            <div class="collapse" id="layouts">
+                                <ul class="navbar-nav ps-3">
+                                    <li>
+                                        <a href="{{ url_for('admin_settings') }}" class="nav-link px-3 mb-2 {{'active' if active_page == 'admin_settings'}}">
+                                            <span class="me-2">
+                                                <i class="bi bi-gear"></i>
+                                            </span>
+                                            <span>Settings</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url_for('admin_signout') }}" class="btn btn-danger py-1 px-3 ms-3">Sign Out</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    <!-- offcanvas -->
+        <main class="mt-5 pt-3">
+            {% block content %}
+
+            {% endblock %}
+            <footer class="footer mt-10 py-2 text-center bg-light me-auto foot">
+                <div class="container">
+                    <div class="row align-items-center ">
+                        <div class="col-lg-3 text-lg-start">Copyright &copy; FingerNotes 2024</div>
+                        <div class="col-lg-3 my-3 my-lg-0">
+                            <a class="btn btn-dark btn-social rounded-circle mx-2" href="#!" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-dark btn-social rounded-circle mx-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-dark btn-social rounded-circle mx-2" href="#!" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                        <div class="col-lg-3 text-lg-end">
+                            <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
+                            <a class="link-dark text-decoration-none" href="#!">Terms of Use</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+    
+        <script src="{{ url_for('static', filename='js/dBoard_js/bootstrap.bundle.min.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+        <script src="{{ url_for('static', filename='js/dBoard_js/jquery-3.5.1.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/dBoard_js/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/dBoard_js/dataTables.bootstrap5.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/dBoard_js/script.js') }}"></script>
+    </body>
+</html>

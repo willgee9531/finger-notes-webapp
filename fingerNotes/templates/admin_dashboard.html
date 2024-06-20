@@ -1,0 +1,285 @@
+{% extends 'admin_base.html' %}
+
+{% set active_page = "admin_dashboard" %}
+
+{% block content %}
+  <div class="container-fluid">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show mx-auto mt-3 reduce" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="row">
+      <div class="col-md-12">
+        <h4>Dashboard</h4>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 mb-3">
+        <div class="card shadow">
+          <div class="card-header">
+            <span><i class="bi bi-table me-2"></i></span> Transactions List
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+                <table
+                id="example"
+                class="table table-striped data-table"
+                style="width: 100%"
+                >
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>School</th>
+                            <th>Session</th>
+                            <th>Term</th>
+                            <th>Grade</th>
+                            <th>Slide(s)</th>
+                            <th>Activity</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>03-04-2024</td>
+                            <td>Heaven Way College</td>
+                            <td>2023/2024</td>
+                            <td>Third term</td>
+                            <td>Grade 7</td>
+                            <td>21 slides</td>
+                            <td>
+                            <a href="#" class="px-3">
+                                <button class="float-start btn btn-danger py-1 px-3 shadow-none" type="button">Download</button>
+                            </a>
+                            </td>
+                            <td>
+                            <form action="">
+                                <div class="d-xl-flex">
+                                <select name="" class="form-select mb-1 me-2 custom-input">
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="Active">Active</option>
+                                </select>
+                                <button class="btn btn-primary fw-bold shadow-none" type="button">Go</button>
+                                </div>
+                            </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>03-04-2024</td>
+                            <td>Heaven Way College</td>
+                            <td>2023/2024</td>
+                            <td>Third term</td>
+                            <td>Grade 7</td>
+                            <td>21 slides</td>
+                            <td>
+                            <a href="#" class="px-3">
+                                <button class="float-start btn btn-danger py-1 px-3 shadow-none" type="button">Download</button>
+                            </a>
+                            </td>
+                            <td>
+                            <form action="">
+                                <div class="d-xl-flex">
+                                <select name="" class="form-select mb-1 me-2 custom-input">
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="Active">Active</option>
+                                </select>
+                                <button class="btn btn-primary fw-bold shadow-none" type="button">Go</button>
+                                </div>
+                            </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>03-04-2024</td>
+                            <td>Heaven Way College</td>
+                            <td>2023/2024</td>
+                            <td>Third term</td>
+                            <td>Grade 7</td>
+                            <td>21 slides</td>
+                            <td>
+                            <a href="#" class="px-3">
+                                <button class="float-start btn btn-danger py-1 px-3 shadow-none" type="button">Download</button>
+                            </a>
+                            </td>
+                            <td>
+                            <form action="">
+                                <div class="d-xl-flex">
+                                <select name="" class="form-select mb-1 me-2 custom-input">
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="Active">Active</option>
+                                </select>
+                                <button class="btn btn-primary fw-bold shadow-none" type="button">Go</button>
+                                </div>
+                            </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>03-04-2024</td>
+                            <td>Heaven Way College</td>
+                            <td>2023/2024</td>
+                            <td>Third term</td>
+                            <td>Grade 7</td>
+                            <td>21 slides</td>
+                            <td>
+                            <a href="#" class="px-3">
+                                <button class="float-start btn btn-danger py-1 px-3 shadow-none" type="button">Download</button>
+                            </a>
+                            </td>
+                            <td>
+                            <form action="">
+                                <div class="d-xl-flex">
+                                <select name="" class="form-select mb-1 me-2 custom-input">
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="Active">Active</option>
+                                </select>
+                                <button class="btn btn-primary fw-bold shadow-none" type="button">Go</button>
+                                </div>
+                            </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>03-04-2024</td>
+                            <td>Heaven Way College</td>
+                            <td>2023/2024</td>
+                            <td>Third term</td>
+                            <td>Grade 7</td>
+                            <td>21 slides</td>
+                            <td>
+                            <a href="#" class="px-3">
+                                <button class="float-start btn btn-danger py-1 px-3 shadow-none" type="button">Download</button>
+                            </a>
+                            </td>
+                            <td>
+                            <form action="">
+                                <div class="d-xl-flex">
+                                <select name="" class="form-select mb-1 me-2 custom-input">
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="Active">Active</option>
+                                </select>
+                                <button class="btn btn-primary fw-bold shadow-none" type="button">Go</button>
+                                </div>
+                            </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>03-04-2024</td>
+                            <td>Heaven Way College</td>
+                            <td>2023/2024</td>
+                            <td>Third term</td>
+                            <td>Grade 7</td>
+                            <td>21 slides</td>
+                            <td>
+                            <a href="#" class="px-3">
+                                <button class="float-start btn btn-danger py-1 px-3 shadow-none" type="button">Download</button>
+                            </a>
+                            </td>
+                            <td>
+                            <form action="">
+                                <div class="d-xl-flex">
+                                <select name="" class="form-select mb-1 me-2 custom-input">
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="Active">Active</option>
+                                </select>
+                                <button class="btn btn-primary fw-bold shadow-none" type="button">Go</button>
+                                </div>
+                            </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>03-04-2024</td>
+                            <td>Heaven Way College</td>
+                            <td>2023/2024</td>
+                            <td>Third term</td>
+                            <td>Grade 7</td>
+                            <td>21 slides</td>
+                            <td>
+                            <a href="#" class="px-3">
+                                <button class="float-start btn btn-danger py-1 px-3 shadow-none" type="button">Download</button>
+                            </a>
+                            </td>
+                            <td>
+                            <form action="">
+                                <div class="d-xl-flex">
+                                <select name="" class="form-select mb-1 me-2 custom-input">
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="Active">Active</option>
+                                </select>
+                                <button class="btn btn-primary fw-bold shadow-none" type="button">Go</button>
+                                </div>
+                            </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>03-04-2024</td>
+                            <td>Heaven Way College</td>
+                            <td>2023/2024</td>
+                            <td>Third term</td>
+                            <td>Grade 7</td>
+                            <td>21 slides</td>
+                            <td>
+                            <a href="#" class="px-3">
+                                <button class="float-start btn btn-danger py-1 px-3 shadow-none" type="button">Download</button>
+                            </a>
+                            </td>
+                            <td>
+                            <form action="">
+                                <div class="d-xl-flex">
+                                <select name="" class="form-select mb-1 me-2 custom-input">
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="Active">Active</option>
+                                </select>
+                                <button class="btn btn-primary fw-bold shadow-none" type="button">Go</button>
+                                </div>
+                            </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>03-04-2024</td>
+                            <td>Heaven Way College</td>
+                            <td>2023/2024</td>
+                            <td>Third term</td>
+                            <td>Grade 7</td>
+                            <td>21 slides</td>
+                            <td>
+                            <a href="#" class="px-3">
+                                <button class="float-start btn btn-danger py-1 px-3 shadow-none" type="button">Download</button>
+                            </a>
+                            </td>
+                            <td>
+                            <form action="">
+                                <div class="d-xl-flex">
+                                <select name="" class="form-select mb-1 me-2 custom-input">
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="Active">Active</option>
+                                </select>
+                                <button class="btn btn-primary fw-bold shadow-none" type="button">Go</button>
+                                </div>
+                            </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Date</th>
+                            <th>School</th>
+                            <th>Session</th>
+                            <th>Term</th>
+                            <th>Grade</th>
+                            <th>Slide(s)</th>
+                            <th>Status</th>
+                            <th>Activity</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock%}

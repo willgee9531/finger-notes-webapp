@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% set active_page = "dashboard" %}
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="row container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show mx-auto mt-3 reduce text-center fs-5 fw-bold" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      <div class="col-md-12">
+        <h4>Dashboard</h4>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 mb-3">
+        <div class="card shadow">
+          <div class="card-header">
+            <span><i class="bi bi-table me-2"></i></span> Transactions List
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table
+                id="example"
+                class="table table-hover data-table text-center"
+                style="width: 100%">
+                <thead>
+                  <tr>
+                    <th>S/N</th>
+                    <th>Date</th>
+                    <th>Session</th>
+                    <th>Term</th>
+                    <th>Grade</th>
+                    <th>Slide(s)</th>
+                    <th>Status</th>
+                    <th>Activity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for upload in uploads %}
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ upload.date.strftime('%d-%m-%Y') }}</td>
+                    <td>{{ upload.session }}</td>
+                    <td>{{ upload.term }}</td>
+                    <td>{{ upload.grade }}</td>
+                    <td>{{ upload.files | length }} slides</td>
+                    <td><em>{{ upload.status }}</em></td>
+                    <td>
+                      <a href="{{ url_for('delete_uploads', id=upload.id)}}" class="btn btn-danger py-1 px-3 shadow-none">Delete</a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                <tfoot>
+                  <tr class="bg-light">
+                    <th>S/N</th>
+                    <th>Date</th>
+                    <th>Session</th>
+                    <th>Term</th>
+                    <th>Grade</th>
+                    <th>Slide(s)</th>
+                    <th>Status</th>
+                    <th>Activity</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock%}
