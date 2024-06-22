@@ -16,9 +16,9 @@
             {% endif %}
         {% endwith %}
         <div class="row">
-            <div class="col-xl-4">
+            <div class="col-sm-11 col-md-9 col-lg-7 col-xl-5 mx-auto">
                 <!-- Profile picture card-->
-                <div class="card mb-4 mb-xl-0 shadow">
+                <div class="card mb-4 mb-xl-0 shadow" style="background-color: #ffffffab;">
                     <div class="card-header">Profile Picture</div>
                     <div class="card-body text-center">
                         <!-- Profile picture image-->
@@ -38,9 +38,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-8">
+            <div class="col-md-11 col-lg-9 col-xl-7 mx-auto">
                 <!-- Account details card-->
-                <div class="card mb-4 shadow">
+                <div class="card mb-4 shadow" style="background-color: #ffffffd0;">
                     <div class="card-header">Account Details</div>
                         <div class="card-body">
                             <form action="" method="post">
@@ -82,7 +82,7 @@
                                     {{ form.school_website(class="form-control custom-input") }}
                                 </div>
                                 <!-- Save changes button-->
-                                {{ form.submit(class="btn btn-success px-5 py-2 shadow-none") }}
+                                {{ form.submit(class="btn w-100 btn-success px-5 py-2 shadow-none") }}
                             </form>
                         </div>
                     </div>

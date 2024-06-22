@@ -26,7 +26,7 @@ button {
   }
   main {
     margin-left: var(--offcanvas-width);
-    height: 250vh;
+    min-height: 160vh;
   }
   /* this is to remove the backdrop */
   .offcanvas-backdrop::before {
@@ -43,7 +43,7 @@ button {
 
 @media (max-width: 991px) {
   main {
-    height: 300vh;
+    min-height: 170vh;
   }
 }
 

@@ -3,7 +3,7 @@
 {% set active_page = "dashboard" %}
 
 {% block content %}
-  <div class="container-fluid">
+  <div class="container-fluid" style="background-color: transparent;">
     <div class="row container">
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -20,9 +20,9 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" style="background-color: transparent;">
       <div class="col-md-12 mb-3">
-        <div class="card shadow">
+        <div class="card shadow" style="background-color: #ffffffd0;">
           <div class="card-header">
             <span><i class="bi bi-table me-2"></i></span> Transactions List
           </div>

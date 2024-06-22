@@ -25,10 +25,10 @@
                     {% endif %}
                 {% endwith %}
                 <!-- Account details card-->
-                <div class="card mb-4 shadow">
+                <div class="card mb-4 shadow col-lg-9 mx-auto" style="background-color: #ffffffab;">
                     <div class="card-header">Account Settings</div>
                     <div class="card-body">
-                        <div class="card my-4 shadow">
+                        <div class="card my-4 shadow" style="background-color: #ffffffab;">
                             <div class="mb-3 card-header">Change password</div>
                             <form class="card-body" method="post">
                                 {{ cform.csrf_token }}
@@ -50,11 +50,11 @@
                                         <div class="invalid-feedback d-block">{{ error }}</div>
                                     {% endfor %}
                                 </div>
-                                {{ cform.submit(class="btn btn-success shadow-none") }}
+                                {{ cform.submit(class="btn w-100 btn-success shadow-none") }}
                             </form>
                         </div>
                         <hr>
-                        <div class="card my-4 shadow">
+                        <div class="card my-4 shadow" style="background-color: #ffffffab;">
                             <div class="mb-3 card-header">Delete Account</div>
                             <div class="card-body">
                                 <div class="alert alert-warning alert-dismissible text-danger fw-bold">
@@ -70,7 +70,7 @@
                                             <div class="invalid-feedback">{{ error }}</div>
                                         {% endfor %}
                                     </div>
-                                    {{ dform.submit(class="btn btn-danger shadow-none", onclick="return confirm('Are you sure you want to delete this entry?')") }}
+                                    {{ dform.submit(class="btn btn-danger w-100 shadow-none", onclick="return confirm('Are you sure you want to delete this entry?')") }}
                                 </form>
                             </div>
                         </div>

@@ -1,6 +1,8 @@
+import io
+import zipfile
 import os
 import secrets
-from flask import current_app
+from flask import abort, send_file
 from PIL import Image
 from fingerNotes.forms import ContactForm, UserDownloadForm, UserForm, SignInForm, AdminSignInForm, ProfileForm, SettingsForm, DeleteAccountForm, ProfilePictureForm, UserUploadForm
 from flask import render_template, url_for, flash, redirect, request
@@ -51,11 +53,13 @@ def save_ppsx(ppsx, school_name):
     ppsx.save(ppsx_path)
     return ppsx_fn
 
+
+
 def delete_upload(ppsx, school_name):
     directory = os.path.join(app.root_path, 'static/slides', school_name, ppsx)
     if os.path.exists(directory):
             os.remove(directory)
-
+    
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -142,7 +146,7 @@ def signout():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    uploads = UploadInfo.query.all()
+    uploads = UploadInfo.query.filter_by(user_id=current_user.id).all()
     return render_template("dashboard.html", uploads=uploads)    
 
 @app.route("/upload/delete/<int:id>")
@@ -216,7 +220,7 @@ def upload():
 
 @app.route("/download")
 @login_required
-def download():
+def enote_download():
     form = UserDownloadForm(grade=0)
     return render_template("download.html", form=form)
 
@@ -302,13 +306,52 @@ def admin():
 @app.route("/admin/dashboard")
 @login_required
 def admin_dashboard():
-    return render_template("admin_dashboard.html")
+    uploads = UploadInfo.query.order_by(UploadInfo.date.desc()).all()
+    return render_template("admin_dashboard.html", uploads=uploads)
+
+
+@app.route('/admin/download/<school_name>/<int:files_id>')
+@login_required
+def download(school_name, files_id):
+    ppsx_files = UploadInfo.query.get_or_404(files_id)
+    memory_file = io.BytesIO()
+
+    with zipfile.ZipFile(memory_file, 'w') as zf:
+        for file in ppsx_files.files:
+            file_path = os.path.join(app.root_path, 'static/slides', school_name, file.ppsx_file)
+            if os.path.exists(file_path):
+                zf.write(file_path, os.path.basename(file_path))
+            else:
+                abort(404, description=f"File {file.ppsx_file} not found")
+
+    memory_file.seek(0)
+        
+    return send_file(memory_file, download_name=f"{school_name}_{ppsx_files.grade}_{ppsx_files.term}_slides.zip", as_attachment=True)        
 
 
 @app.route("/admin/upload")
 @login_required
 def admin_upload():
     return render_template("admin_upload.html")
+
+
+from flask import request, redirect, url_for, flash
+
+@app.route('/update_status', methods=['POST'])
+@login_required
+def update_status():
+    status = request.form.get('status')
+    
+    # Here you can add the logic to update the status in the database
+    # For example:
+    try:
+        # Assume you have a function to update the status for the current user
+        update_user_status(current_user.id, status)
+        flash(f"Status updated to {status} successfully!", "success")
+    except Exception as e:
+        flash(f"An error occurred while updating status: {str(e)}", "danger")
+    
+    return redirect(url_for('dashboard'))
 
 
 @app.route("/admin/partners")

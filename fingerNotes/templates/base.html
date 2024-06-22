@@ -110,7 +110,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ url_for('download') }}" class="nav-link px-3 {{'active' if active_page == 'download'}}">
+                            <a href="{{ url_for('enote_download') }}" class="nav-link px-3 {{'active' if active_page == 'download'}}">
                                 <span class="me-2"><i class="bi bi-download"></i></span>
                                 <span>Download e-note</span>
                             </a>
@@ -160,7 +160,7 @@
             </div>
         </div>
     <!-- offcanvas -->
-        <main class="mt-5 pt-3">
+        <main class="mt-5 pt-3" style="background-image: url(../static/img/backgroundimg.jpg);background-size: 1300px;">
             {% block content %}
 
             {% endblock %}

@@ -24,7 +24,7 @@
       .container {
         max-width: 450px;
         margin-top: 50px;
-        background-color: #fff;
+        background-color: #ffffffda;
         border-radius: 5px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
         padding: 30px;
@@ -71,7 +71,7 @@
       }
     </style>
   </head>
-  <body>
+  <body style="background-image: url(../static/img/backgroundimg.jpg);background-position: center;background-size: cover;">
     {% with messages = get_flashed_messages(with_categories=true) %} {% if
     messages %} {% for category, message in messages %}
     <div
@@ -87,7 +87,7 @@
     {% endfor %} {% endif %} {% endwith %}
 
     <div class="container">
-      <div class="rounded mb-5 w-100 mx-auto h-50">
+      <div class="rounded mb-2 w-100 mx-auto h-50">
         <a href="{{ url_for('homepage') }}"
           ><img src="../static/img/navbar-logo.png" alt="Exotic Logo"
         /></a>
@@ -98,14 +98,14 @@
         action="{% if admin %}/admin{% else %}/signin{% endif %}"
         method="POST">
         {{ form.csrf_token }} {% if admin %}
-        <div class="input-group mb-4">
+        <div class="input-group mb-3">
           <span class="input-group-text">
               <i class="bi bi-key-fill" style="font-size: 1.5em;"></i>
           </span>
           {{ form.password_hash(class="form-control py-3 px-4 custom-input") }}
         </div>
         {% else %}
-        <div class="mb-4 input-group">
+        <div class="mb-3 input-group">
           <span class="input-group-text">
             <i class="bi bi-envelope-fill" style="font-size: 1.5em;"></i>
           </span>
@@ -114,7 +114,7 @@
           <div class="text-danger">{{ error }}</div>
           {% endfor %}
         </div>
-        <div class="input-group mb-4">
+        <div class="input-group mb-2">
             <span class="input-group-text">
                 <i class="bi bi-key-fill" style="font-size: 1.5em;"></i>
             </span>
@@ -125,7 +125,7 @@
           form.remember.label(class="form-check-label text-muted") }}
         </div>
         {% endif %} {{ form.submit(class="btn btn-primary btn-exotic") }}
-        <p class="text-muted text-center mt-3">
+        <p class="text-muted text-center mt-1">
           <a href="#">Forgot Password?</a>
         </p>
         <p class="text-muted text-center">

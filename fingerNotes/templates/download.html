@@ -12,7 +12,7 @@
         </div>
     {% endfor %}
     
-    <fieldset class="card pb-4 mb-5 mt-5 col-xl-6 mx-auto shadow">
+    <fieldset class="card pb-4 mb-5 mt-5 col-11 col-sm-9 col-md-8 col-xl-6 mx-auto shadow" style="background-color: #ffffffd0;">
         <legend class="card-header">Download e-note</legend>
         <div class="card-body">
             {% if not data %}
@@ -20,7 +20,7 @@
                     <div class="mb-5">
                         {{ form.grade(class="form-select custom-input") }}
                     </div>
-                    <button class="btn btn-primary col-xl-12 fw-bold p-2 shadow-none" type="button">Download</button>
+                    <button class="btn btn-primary col-12 fw-bold p-2 shadow-none" type="button">Download</button>
                 </form>
             {% else %}
                 <div class="alert alert-warning alert-dismissible text-success fw-bold">
