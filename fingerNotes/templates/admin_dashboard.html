@@ -4,7 +4,7 @@ block content %}
   {% with messages = get_flashed_messages(with_categories=true) %} {% if
   messages %} {% for category, message in messages %}
   <div
-    class="alert alert-{{ category }} alert-dismissible fade show mx-auto mt-3 reduce"
+    class="alert alert-{{ category }} alert-dismissible text-center fade show mx-auto mt-3 reduce"
     role="alert">
     {{ message }}
     <button
@@ -63,19 +63,11 @@ block content %}
                     >
                   </td>
                   <td>
-                    <form action="{{ url_for('update_status') }}" method="POST">
+                    <form action="{{ url_for('update_status', id=upload.id) }}" method="POST">
+                      {{ form[upload.id].hidden_tag() }}  <!-- CSRF Token -->
                       <div class="d-xl-flex">
-                        <select
-                          name="status"
-                          class="form-select mb-1 me-2 custom-input">
-                          <option value="Pending" selected>Pending</option>
-                          <option value="Active">Active</option>
-                        </select>
-                        <button
-                          class="btn btn-primary fw-bold shadow-none"
-                          type="submit">
-                          Go
-                        </button>
+                        {{ form[upload.id].status(class="form-select mb-1 me-2 custom-input") }}
+                        {{ form[upload.id].submit(class="btn btn-primary fw-bold shadow-none") }}
                       </div>
                     </form>
                   </td>

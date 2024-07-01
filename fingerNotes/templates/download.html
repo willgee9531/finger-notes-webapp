@@ -5,28 +5,27 @@
 {% block content %}
 
    
-    {% for message in get_flashed_messages() %}
-        <div class="alert alert-warning alert-dismissible fade show mx-auto mt-3 reduce" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    {% endfor %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="w-75 alert alert-{{ category }} alert-dismissible text-center fade show mx-auto mt-3 reduce" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     
     <fieldset class="card pb-4 mb-5 mt-5 col-11 col-sm-9 col-md-8 col-xl-6 mx-auto shadow" style="background-color: #ffffffd0;">
         <legend class="card-header">Download e-note</legend>
         <div class="card-body">
-            {% if not data %}
-                <form class="card-body">
-                    <div class="mb-5">
-                        {{ form.grade(class="form-select custom-input") }}
-                    </div>
-                    <button class="btn btn-primary col-12 fw-bold p-2 shadow-none" type="button">Download</button>
-                </form>
-            {% else %}
-                <div class="alert alert-warning alert-dismissible text-success fw-bold">
-                    e-note not available, check back later.
+            <form class="card-body" method="POST">
+                {{ form.csrf_token }}
+                <div class="mb-5">
+                    {{ form.grade(class="form-select custom-input") }}
                 </div>
-            {% endif %}
+                {{ form.submit(class="btn btn-primary col-12 fw-bold p-2 shadow-none") }}
+            </form>
         </div>
     </fieldset>
   

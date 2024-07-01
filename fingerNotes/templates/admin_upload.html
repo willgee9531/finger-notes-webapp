@@ -1,62 +1,80 @@
-{% extends 'admin_base.html' %}
+{% extends 'admin_base.html' %} {% set active_page = "admin_upload" %} {% block
+content %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="w-75 alert alert-{{ category }} alert-dismissible text-center fade show mx-auto mt-3 reduce" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+  {% endwith %}
 
-{% set active_page = "admin_upload" %}
-
-{% block content %}
-
-   
-    {% for message in get_flashed_messages() %}
-        <div class="alert alert-warning alert-dismissible fade show mx-auto mt-3 reduce" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  <fieldset
+    class="card pb-4 mb-5 mt-5 col-11 col-sm-9 col-md-7 col-lg-9 col-xl-6 mx-auto shadow">
+    <legend class="card-header">Upload E-notes</legend>
+    <div class="card-body">
+      <form class="card-body" method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+          {{ form.school(class="form-select custom-input") }}
         </div>
-    {% endfor %}
-            <!-- Account details card-->
-    
-    <fieldset class="card pb-4 mb-5 mt-5 col-xl-6 mx-auto shadow">
-        <legend class="card-header">Upload E-notes</legend>
+        <div class="mb-3">{{ form.grade(class="form-select custom-input") }}</div>
+        {{ form.file(class="form-control mb-3 custom-input", accept=".exe") }} {{
+        form.submit(class="btn btn-primary col-xl-12 fw-bold p-2 shadow-none") }}
+      </form>
+    </div>
+  </fieldset>
+
+  <div class="row">
+    <div class="col-sm-11 col-md-10 mx-auto mb-3">
+      <div class="card shadow">
+        <div class="card-header">
+          <span><i class="bi bi-table me-2"></i></span> Transactions List
+        </div>
         <div class="card-body">
-            <form class="card-body">
-                <div class="mb-3">
-                    <select name="school" class="form-select custom-input">
-                        <option value="" selected>Select school</option>
-                        <option value="First term">Heaven Way College</option>
-                        <option value="Second term">Gloryville SChools</option>
-                        <option value="Third term">Graceland Montesorri</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <select name="grade" class="form-select custom-input">
-                        <option value="" selected>Select grade</option>
-                        <option value="Grade 7">Grade 7</option>
-                        <option value="Grade 8">Grade 8</option>
-                        <option value="Grade 9">Grade 9</option>
-                        <option value="Grade 10">Grade 10</option>
-                        <option value="Grade 11">Grade 11</option>
-                        <option value="Grade 12">Grade 12</option>
-                    </select>
-                </div>
-                <input type="file" class="form-control mb-3 custom-input" id="upload">
-                <button class="btn btn-primary col-xl-12 fw-bold p-2 shadow-none" type="button">Upload</button>
-            </form>         
+          <div class="table-responsive">
+            <table
+              id="example"
+              class="table table-striped data-table text-center"
+              style="width: 100%">
+              <thead>
+                <tr>
+                  <th>S/N</th>
+                  <th>School</th>
+                  <th>Grade</th>
+                  <th>E-note</th>
+                  <th>Activity</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for upload in uploads %}
+                <tr>
+                  <td>{{ loop.index }}</td>
+                  <td>{{ upload.user.school_name }}</td>
+                  <td>{{ upload.grade }}</td>
+                  <td>{{ upload.exe_file }}</td>
+                  <td>
+                    <a href="{{ url_for('delete_exe', id=upload.id)}}" class="btn btn-danger py-1 px-3 shadow-none">Delete</a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>S/N</th>
+                  <th>School</th>
+                  <th>Grade</th>
+                  <th>E-note</th>
+                  <th>Activity</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
-    </fieldset>
-    <!----------- clear e-notes form ----------->
-    <fieldset class="card pb-4 mb-5 mt-5 col-xl-6 mx-auto shadow">
-        <legend class="card-header">Delete E-notes from database</legend>
-        <div class="card-body">
-            <form class="card-body">
-                <div class="mb-3">
-                    <select name="school" class="form-select custom-input">
-                        <option value="" selected>Select school</option>
-                        <option value="First term">Heaven Way College</option>
-                        <option value="Second term">Gloryville SChools</option>
-                        <option value="Third term">Graceland Montesorri</option>
-                    </select>
-                </div>
-                <button class="btn btn-danger col-xl-12 fw-bold p-2 shadow-none" type="button">Delete E-notes</button>
-            </form>         
-        </div>
-    </fieldset>
-  
+      </div>
+    </div>
+  </div>
+
 {% endblock %}

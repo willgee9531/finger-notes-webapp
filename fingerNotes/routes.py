@@ -4,16 +4,25 @@ import os
 import secrets
 from flask import abort, send_file
 from PIL import Image
-from fingerNotes.forms import ContactForm, UserDownloadForm, UserForm, SignInForm, AdminSignInForm, ProfileForm, SettingsForm, DeleteAccountForm, ProfilePictureForm, UserUploadForm
+from fingerNotes.forms import *
 from flask import render_template, url_for, flash, redirect, request
-from fingerNotes.models import User, Admin, UploadInfo, File
+from fingerNotes.models import *
 from fingerNotes import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
+from werkzeug.utils import secure_filename
+
+
 
 ALLOWED_EXTENSIONS = {'ppsx', 'ppsm'}
+ALLOWED_EXTENSION = {'exe'}
 
 def allowed_file(file):
     return '.' in file.filename and file.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def allowed_exe(file):
+    return '.' in file.filename and file.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSION
+
+
 
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
@@ -80,7 +89,9 @@ def homepage():
 
 @app.route("/partners")
 def partners():
-    return render_template("partners.html")
+
+    partners = Partner.query.all()
+    return render_template('partners.html', partners=partners)
 
 
 
@@ -97,7 +108,7 @@ def signup():
             # Check if user with the same email already exists
             existing_user = User.query.filter_by(email=email).first()
             if existing_user:
-                flash("User with the same email already exists", "warning")
+                flash("User with the same email already exists", "danger")
             else:
                 # Create new user
                 new_user = User(
@@ -146,7 +157,7 @@ def signout():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    uploads = UploadInfo.query.filter_by(user_id=current_user.id).all()
+    uploads = UploadInfo.query.filter_by(user_id=current_user.id).order_by(UploadInfo.date.desc()).all()
     return render_template("dashboard.html", uploads=uploads)    
 
 @app.route("/upload/delete/<int:id>")
@@ -212,16 +223,18 @@ def upload():
     return render_template("upload.html", form=form)
 
 
-# @app.route("/upload/delete")
-# @login_required
-# def delete_upload():
-#     return render_template("upload.html")
-
-
-@app.route("/download")
+@app.route("/download", methods=["GET", "POST"])
 @login_required
 def enote_download():
     form = UserDownloadForm(grade=0)
+    if form.validate_on_submit():
+        grade = form.grade.data
+        upload = UploadEnote.query.filter_by(user_id=current_user.id, grade=grade).first()
+        if upload:
+            file_path = os.path.join(app.root_path, 'static/exe', current_user.school_name, upload.exe_file)
+            return send_file(file_path, download_name=f"{current_user.school_name}_{grade}_enote.exe", as_attachment=True)
+        else:
+            flash("E-note not ready, be patient!", "info")
     return render_template("download.html", form=form)
 
 
@@ -280,6 +293,9 @@ def settings():
                 flash("Password Changed Successfully!", "success")
             return redirect(url_for('settings'))
         elif delete_form.validate_on_submit():
+            current_ppp = os.path.join(app.root_path, 'static/img/profile_pics', current_user.image_file)
+            # Delete the user's current profile picture file
+            os.remove(current_ppp)
             # Process delete account form submission
             user = User.query.filter_by(id=current_user.id).first()
             db.session.delete(user)
@@ -303,11 +319,35 @@ def admin():
     return render_template("login.html", form=form, admin=True)
 
 
-@app.route("/admin/dashboard")
+@app.route("/admin/dashboard", methods=["GET", "POST"])
 @login_required
 def admin_dashboard():
     uploads = UploadInfo.query.order_by(UploadInfo.date.desc()).all()
-    return render_template("admin_dashboard.html", uploads=uploads)
+    forms = {upload.id: StatusForm(status=upload.status) for upload in uploads}
+    return render_template("admin_dashboard.html", uploads=uploads, form=forms)
+
+
+@app.route('/update_status/<int:id>', methods=['POST'])
+@login_required
+def update_status(id):
+    post = UploadInfo.query.get(id)
+    form = StatusForm(status=post.status)
+    if form.validate_on_submit():
+        status = form.status.data
+        post = UploadInfo.query.get(id)
+        # Add logic to update the status in the database
+        try:
+            if post:
+                post.status = status
+                db.session.commit()
+                flash(f"Status updated to {status} successfully!", "success")
+            else:
+                raise ValueError("User not found")
+        except Exception as e:
+            flash(f"An error occurred while updating status: {str(e)}", "danger")
+        return redirect(url_for('admin_dashboard'))
+    return redirect(url_for('admin_dashboard'))
+
 
 
 @app.route('/admin/download/<school_name>/<int:files_id>')
@@ -329,35 +369,98 @@ def download(school_name, files_id):
     return send_file(memory_file, download_name=f"{school_name}_{ppsx_files.grade}_{ppsx_files.term}_slides.zip", as_attachment=True)        
 
 
-@app.route("/admin/upload")
+@app.route("/admin/upload", methods=["GET", "POST"])
 @login_required
 def admin_upload():
-    return render_template("admin_upload.html")
+    form = AdminUploadForm(school=0, grade=0)
+    uploads = UploadEnote.query.all()
+    if form.validate_on_submit():
+        school = form.school.data
+        grade = form.grade.data
+        file = form.file.data
+
+        user = User.query.filter_by(school_name=school).first()
+
+        if user:
+            if not allowed_exe(file):
+                        flash("Extension not supported. Upload only Application (.exe) files", "warning")
+                        return redirect(url_for("admin_upload"))
+            # Delete previous .exe file for the same grade if exists
+            previous_upload = UploadEnote.query.filter_by(user_id=user.id, grade=grade).first()
+            if previous_upload:
+                # Assuming the file path is stored in exe_file attribute
+                file_path = os.path.join(app.root_path, 'static/exe', user.school_name, previous_upload.exe_file)
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+                    db.session.delete(previous_upload)
+                    db.session.commit()
+            
+            random_hex = secrets.token_hex(8)
+            _, f_ext = os.path.splitext(file.filename)
+            exe_fn = random_hex + f_ext
+            directory = os.path.join(app.root_path, 'static/exe', user.school_name)
+            
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            
+            exe_path = os.path.join(directory, exe_fn)
+            file.save(exe_path)
+
+            new_upload = UploadEnote(grade=grade, exe_file=exe_fn, user_id=user.id)
+            db.session.add(new_upload)
+            db.session.commit()
+            
+            flash('E-note uploaded successfully!', 'success')
+            return redirect(url_for('admin_upload'))
+    return render_template("admin_upload.html", form=form, uploads=uploads)
 
 
-from flask import request, redirect, url_for, flash
 
-@app.route('/update_status', methods=['POST'])
-@login_required
-def update_status():
-    status = request.form.get('status')
-    
-    # Here you can add the logic to update the status in the database
-    # For example:
+@app.route("/admin/upload/delete/<int:id>")
+def delete_exe(id):
+    upload_to_delete = UploadEnote.query.get_or_404(id)
     try:
-        # Assume you have a function to update the status for the current user
-        update_user_status(current_user.id, status)
-        flash(f"Status updated to {status} successfully!", "success")
-    except Exception as e:
-        flash(f"An error occurred while updating status: {str(e)}", "danger")
-    
-    return redirect(url_for('dashboard'))
+        directory = os.path.join(app.root_path, 'static/exe', upload_to_delete.user.school_name, upload_to_delete.exe_file)
+        if os.path.exists(directory):
+            os.remove(directory)
+            db.session.delete(upload_to_delete)
+            db.session.commit()
+            flash("Upload deleted successfully", "success")
+            return redirect(url_for('admin_upload'))
+    except:
+        flash("There was a problem deleting the upload", "info")
+        return redirect(url_for('admin_upload'))
 
 
-@app.route("/admin/partners")
+@app.route("/admin/partners", methods=["GET", "POST"])
 @login_required
 def admin_partners():
-    return render_template("admin_partners.html")
+    form = AddPartnersForm()
+    page = request.args.get('page', 1, type=int)
+    partners = Partner.query.order_by(Partner.date.desc()).paginate(page=page, per_page=2)
+    if form.validate_on_submit():
+        random_hex = secrets.token_hex(8)
+        _, f_ext = os.path.splitext(form.image.data.filename)
+        image_file = random_hex + f_ext
+        image_path = os.path.join(app.root_path, 'static/img/LPage_img/partners', image_file)
+        if not os.path.exists(image_path):
+            os.makedirs(image_path)
+        form.image.data.save(image_path)
+
+        partner = Partner(
+            school_name=form.school_name.data,
+            website=form.website.data,
+            facebook=form.facebook.data,
+            twitter=form.twitter.data,
+            instagram=form.instagram.data,
+            image_file=image_file
+        )
+        db.session.add(partner)
+        db.session.commit()
+        flash('New partner added!', 'success')
+        return redirect(url_for('admin_partners'))
+    
+    return render_template('admin_partners.html', form=form, partners=partners)
 
 
 @app.route("/admin/settings", methods=["GET", "POST"])
@@ -368,6 +471,9 @@ def admin_settings():
         school = request.form['delete-account']
         user = User.query.filter_by(school_name=school).first()
         if user:
+            current_ppp = os.path.join(app.root_path, 'static/img/profile_pics', user.image_file)
+            # Delete the user's current profile picture file
+            os.remove(current_ppp)
             db.session.delete(user)
             db.session.commit()
             flash("School has been deleted!", "success")

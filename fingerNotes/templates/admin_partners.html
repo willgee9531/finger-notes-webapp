@@ -1,241 +1,117 @@
-{% extends 'admin_base.html' %}
+{% extends 'admin_base.html' %} {% set active_page = "admin_partners" %} {%
+block content %}
+<style>
+  .card {
+    transition: transform 0.3s ease-in-out;
+  }
 
-{% set active_page = "admin_partners" %}
+  .card:hover {
+    transform: scale(
+      1.04
+    ); /* Move the card 10px to the right and down when hovered */
+  }
 
-{% block content %}
-    <style>
-        .card {
-            transition: transform 0.3s ease-in-out;
-        }
-        
-        .card:hover {
-            transform: scale(1.04); /* Move the card 10px to the right and down when hovered */
-        }
+  .school {
+    max-width: 150px;
+  }
 
-        .school {
-            max-width: 150px;
-        }
+  .resize {
+    max-width: 1200px;
+  }
+</style>
 
-        .resize {
-            max-width: 1100px;
-        }
-    </style>
-   
-    {% for message in get_flashed_messages() %}
-        <div class="alert alert-warning alert-dismissible fade show mx-auto mt-3 reduce" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    {% endfor %}
+{% with messages = get_flashed_messages(with_categories=true) %} {% if messages
+%} {% for category, message in messages %}
+<div
+  class="w-75 alert alert-{{ category }} alert-dismissible text-center fade show mx-auto mt-3 reduce"
+  role="alert">
+  {{ message }}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"></button>
+</div>
+{% endfor %} {% endif %} {% endwith %}
 
-        <h2 class="text-center fw-bolder section-heading text-uppercase mb-5">Add Partners</h2>
+<h2 class="text-center fw-bolder section-heading text-uppercase mb-5">
+  Add Partners
+</h2>
 
-        <div class="resize mx-auto my-4 mb-5 shadow px-4">
-            <div class="mb-3 card-header">New Partner Info</div>
-            <form class="card-body">
-                <div class="mb-3">
-                    <input class="form-control custom-input" id="inputUsername" type="text" placeholder="School Name">
-                </div>
-                <div class="mb-3">
-                    <input class="form-control custom-input" id="inputUsername" type="url" placeholder="School website/Portal">
-                </div>
-                <div class="mb-3">
-                    <input class="form-control custom-input" id="inputUsername" type="text" placeholder="Facebook page">
-                </div>
-                <div class="mb-3">
-                    <input class="form-control custom-input" id="inputUsername" type="text" placeholder="Twitter page">
-                </div>
-                <div class="mb-3">
-                    <input class="form-control custom-input" id="inputUsername" type="text" placeholder="Instagram page">
-                </div>
-                <input type="file" class="form-control mb-3 custom-input" id="upload">
-                <button class="btn btn-success shadow-none px-5 fw-bold" type="button">Add</button>
-            </form>
-        </div>
+<div class="col-11 col-sm-10 col-md-9 col-lg-8 col-xl-6 resize mx-auto my-4 mb-5 shadow px-4">
+  <div class="mb-3 card-header">New Partner Info</div>
+  <form method="POST" enctype="multipart/form-data" class="card-body">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.school_name(class="form-control custom-input", placeholder="School Name") }}
+    </div>
+    <div class="mb-3">
+        {{ form.website(class="form-control custom-input", placeholder="School website/Portal") }}
+    </div>
+    <div class="mb-3">
+        {{ form.facebook(class="form-control custom-input", placeholder="Facebook page") }}
+    </div>
+    <div class="mb-3">
+        {{ form.twitter(class="form-control custom-input", placeholder="Twitter page") }}
+    </div>
+    <div class="mb-3">
+        {{ form.instagram(class="form-control custom-input", placeholder="Instagram page") }}
+    </div>
+    <div class="mb-3">
+        {{ form.image(class="form-control custom-input") }}
+    </div>
+    <div class="mb-3">
+        {{ form.submit(class="w-100 btn btn-success shadow-none px-5 fw-bold") }}
+    </div>
+  </form>
+</div>
 
-        <h2 class="text-center fw-bolder section-heading text-uppercase mt-5 mb-5">List of Partners</h2>
+<h2 class="text-center fw-bolder section-heading text-uppercase mt-5 mb-5">
+  List of Partners
+</h2>
 
-
-        <div class="row mx-auto resize mt-5">
-            <div class="col-md-6">
+<div style="height: 180vh;">
+    <div class="row mx-auto resize mt-5">
+      {% for partner in partners.items %}
+        {% if partner %}
+          <div class="col-8 col-sm-11 col-md-9 col-lg-10 col-xl-6 mx-auto">
             <!-- Card 1 -->
-                <div class="card mb-5 shadow">
-                    <div class="row">
-                    <div class="col-sm-3 col-md-3">
-                        <img src="{{url_for('static', filename='img/LPage_img/team/1.jpg')}}" alt="..." class="card-img school">
-                    </div>
-                    <div class="col-sm-6 col-md-6">
-                        <div class="card-body">
-                        <h5 class="card-title">Heaven Way College</h5>
-                        <a class="font-italic card-text" href="#"
-                            ><p class="text-muted">heavenwaycollege.com</p></a
-                        >
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-twitter"></i
-                        ></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-facebook-f"></i
-                        ></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-instagram"></i
-                        ></a>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-md-3">
-                        <a href="#" class="btn btn-danger py-1 mt-5 px-3">Delete</a>
-                    </div>
-                    </div>
+            <div class="card mb-5 shadow">
+              <div class="row">
+                <div class="col-sm-5 col-md-5 col-lg-4 col-xl-4">
+                  <img
+                    src="{{ url_for('static', filename='img/LPage_img/partners/' + partner.image_file) }}"
+                    alt="..."
+                    class="card-img school" />
                 </div>
-            </div>
-            <div class="col-md-6">
-                <!-- Card 2 -->
-                <div class="card mb-5 shadow">
-                    <div class="row">
-                    <div class="col-sm-3 col-md-3">
-                        <img src="{{url_for('static', filename='img/LPage_img/team/2.jpg')}}" alt="..." class="card-img school">
+                <div class="col-sm-7 col-md-7 col-lg-8 col-xl-8">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">{{ partner.school_name }}</h5>
+                    <a class="font-italic card-text" href="{{ partner.website }}"
+                      ><p class="text-muted">{{ partner.website }}</p></a
+                    >
+                    <a class="btn btn-dark btn-social mx-2" href="{{ partner.twitter }}"
+                      ><i class="fab fa-twitter"></i
+                    ></a>
+                    <a class="btn btn-dark btn-social mx-2" href="{{ partner.facebook }}"
+                      ><i class="fab fa-facebook-f"></i
+                    ></a>
+                    <a class="btn btn-dark btn-social mx-2" href="{{ partner.instagram }}"
+                      ><i class="fab fa-instagram"></i
+                    ></a>
+                    <div class="">
+                      <a href="#" class="btn btn-danger py-1 mt-3 w-75">Delete</a>
                     </div>
-                    <div class="col-sm-6 col-md-6">
-                        <div class="card-body">
-                        <h5 class="card-title">Heaven Way College</h5>
-                        <a class="font-italic card-text" href="#"
-                            ><p class="text-muted">heavenwaycollege.com</p></a
-                        >
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-twitter"></i
-                        ></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-facebook-f"></i
-                        ></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-instagram"></i
-                        ></a>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-md-3">
-                        <a href="#" class="btn btn-danger py-1 mt-5 px-3">Delete</a>
-                    </div>
-                    </div>
+                  </div>
                 </div>
+                
+              </div>
             </div>
-            <div class="col-md-6">
-                <!-- Card 3 -->
-                <div class="card mb-5 shadow">
-                    <div class="row">
-                    <div class="col-sm-3 col-md-3">
-                        <img src="{{url_for('static', filename='img/LPage_img/team/2.jpg')}}" alt="..." class="card-img school">
-                    </div>
-                    <div class="col-sm-6 col-md-6">
-                        <div class="card-body">
-                        <h5 class="card-title">Heaven Way College</h5>
-                        <a class="font-italic card-text" href="#"
-                            ><p class="text-muted">heavenwaycollege.com</p></a
-                        >
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-twitter"></i
-                        ></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-facebook-f"></i
-                        ></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-instagram"></i
-                        ></a>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-md-3">
-                        <a href="#" class="btn btn-danger py-1 mt-5 px-3">Delete</a>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <!-- Card 4 -->
-                <div class="card mb-5 shadow">
-                    <div class="row">
-                    <div class="col-sm-3 col-md-3">
-                        <img src="{{url_for('static', filename='img/LPage_img/team/2.jpg')}}" alt="..." class="card-img school">
-                    </div>
-                    <div class="col-sm-6 col-md-6">
-                        <div class="card-body">
-                        <h5 class="card-title">Heaven Way College</h5>
-                        <a class="font-italic card-text" href="#"
-                            ><p class="text-muted">heavenwaycollege.com</p></a
-                        >
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-twitter"></i
-                        ></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-facebook-f"></i
-                        ></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-instagram"></i
-                        ></a>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-md-3">
-                        <a href="#" class="btn btn-danger py-1 mt-5 px-3">Delete</a>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <!-- Card 5 -->
-                <div class="card mb-5 shadow">
-                    <div class="row">
-                    <div class="col-sm-3 col-md-3">
-                        <img src="{{url_for('static', filename='img/LPage_img/team/2.jpg')}}" alt="..." class="card-img school">
-                    </div>
-                    <div class="col-sm-6 col-md-6">
-                        <div class="card-body">
-                        <h5 class="card-title">Heaven Way College</h5>
-                        <a class="font-italic card-text" href="#"
-                            ><p class="text-muted">heavenwaycollege.com</p></a
-                        >
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-twitter"></i
-                        ></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-facebook-f"></i
-                        ></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-instagram"></i
-                        ></a>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-md-3">
-                        <a href="#" class="btn btn-danger py-1 mt-5 px-3">Delete</a>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <!-- Card 6 -->
-                <div class="card mb-5 shadow">
-                    <div class="row">
-                    <div class="col-sm-3 col-md-3">
-                        <img src="{{url_for('static', filename='img/LPage_img/team/2.jpg')}}" alt="..." class="card-img school">
-                    </div>
-                    <div class="col-sm-6 col-md-6">
-                        <div class="card-body">
-                        <h5 class="card-title">Heaven Way College</h5>
-                        <a class="font-italic card-text" href="#"
-                            ><p class="text-muted">heavenwaycollege.com</p></a
-                        >
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-twitter"></i
-                        ></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-facebook-f"></i
-                        ></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!"
-                            ><i class="fab fa-instagram"></i
-                        ></a>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-md-3">
-                        <a href="#" class="btn btn-danger py-1 mt-5 px-3">Delete</a>
-                    </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+          </div>
+        {% else %}
+          <div>No partner(s) yet!</div>
+        {% endif %}
+      {% endfor %}
+    </div>
+</div>
 {% endblock %}

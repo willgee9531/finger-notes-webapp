@@ -48,6 +48,8 @@ class User(db.Model, UserMixin):
     school_address = db.Column(db.String(255))
     school_website = db.Column(db.String(255))
     upload_infos = db.relationship('UploadInfo', backref='user', lazy=True, cascade='all, delete-orphan')
+    enotes = db.relationship('UploadEnote', backref='user', lazy=True, cascade='all, delete-orphan')
+
 
     def __repr__(self):
         return f'<User {self.id}: {self.school_name} - {self.email} - {self.country}>'
@@ -78,6 +80,18 @@ class File(db.Model):
         return f'<ppsx - {self.ppsx_file}>'
     
 
+class UploadEnote(db.Model):
+    __tablename__ = 'enotes'
+    id = db.Column(db.Integer, primary_key=True)
+    grade = db.Column(db.String(20), nullable=False)
+    exe_file = db.Column(db.String(20), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    def __repr__(self):
+        return f'<Enote {self.id}: {self.grade} - {self.exe_file}>'
+    
+    
+
 class Admin(db.Model, UserMixin):
     __tablename__ = 'admin'
     id = db.Column(db.Integer, primary_key=True)
@@ -86,5 +100,19 @@ class Admin(db.Model, UserMixin):
     def __repr__(self):
         return f'<admin {self.id}: {self.password}>'
     
+
+
+class Partner(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    school_name = db.Column(db.String(120), nullable=False, unique=True)
+    website = db.Column(db.String(255), nullable=False)
+    facebook = db.Column(db.String(255), nullable=False)
+    twitter = db.Column(db.String(255), nullable=False)
+    instagram = db.Column(db.String(255), nullable=False)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    image_file = db.Column(db.String(20), nullable=False, default='default.png')
+
+    def __repr__(self):
+        return f'<Partner {self.id}: {self.school_name} - {self.website}>'
 
 

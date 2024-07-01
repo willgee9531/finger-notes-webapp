@@ -43,7 +43,7 @@ button {
 
 @media (max-width: 991px) {
   main {
-    min-height: 170vh;
+    min-height: 180vh;
   }
 }
 

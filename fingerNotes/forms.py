@@ -52,7 +52,7 @@ class UserUploadForm(FlaskForm):
     grade = SelectField('Grade', validators=[DataRequired()], 
                         choices=[("", "Select grade"), ("Grade 7", "Grade 7"), ("Grade 8", "Grade 8"), ("Grade 9", "Grade 9"), ("Grade 10", "Grade 10"), ("Grade 11", "Grade 11"), ("Grade 12", "Grade 12")])
     slides = MultipleFileField('Slides', validators=[DataRequired()], render_kw={"multiple": True})
-    submit = SubmitField('Upload')
+    submit = SubmitField('Upload Slides')
 
 
 
@@ -82,7 +82,7 @@ class ProfileForm(FlaskForm):
 
 
 class ProfilePictureForm(FlaskForm):
-    picture = FileField('Profile Picture', validators=[FileAllowed(['jpg', 'png'], 'Images only! JPG or PNG')])
+    picture = FileField('Profile Picture', validators=[InputRequired(), FileAllowed(['jpg', 'png'], 'Images only! JPG or PNG')])
     submit = SubmitField('Upload Photo')
 
 
@@ -104,17 +104,42 @@ class DeleteAccountForm(FlaskForm):
     submit = SubmitField('Deactivate Account')
     
 
-class AdminDeleteAccountForm(FlaskForm):
-    pass
+# class AdminDeleteAccountForm(FlaskForm):
+#     pass
 
 class AddPartnersForm(FlaskForm):
-    pass
+    school_name = StringField('School Name', validators=[DataRequired()])
+    website = URLField('School website/Portal', validators=[DataRequired(), URL()])
+    facebook = StringField('Facebook page', validators=[DataRequired(), URL()])
+    twitter = StringField('Twitter page', validators=[DataRequired(), URL()])
+    instagram = StringField('Instagram page', validators=[DataRequired(), URL()])
+    image = FileField('School Logo', validators=[DataRequired(), DataRequired()])
+    submit = SubmitField('Add')
+
+
 
 class AdminUploadForm(FlaskForm):
-    pass
+    school = SelectField('School', choices=[], validators=[DataRequired()])
+    grade = SelectField('Grade', choices=[
+        ('', 'Select grade'),
+        ('Grade 7', 'Grade 7'),
+        ('Grade 8', 'Grade 8'),
+        ('Grade 9', 'Grade 9'),
+        ('Grade 10', 'Grade 10'),
+        ('Grade 11', 'Grade 11'),
+        ('Grade 12', 'Grade 12')
+    ], validators=[DataRequired()])
+    file = FileField('File', validators=[DataRequired()])
+    submit = SubmitField('Upload e-note')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.school.choices = [('', 'Select school')] + [(user.school_name, user.school_name) for user in User.query.all()]
 
 
-
+class StatusForm(FlaskForm):
+    status = SelectField('Status', choices=[('Pending', 'Pending'), ('Active', 'Active')])
+    submit = SubmitField('Go')
 
 
     
